@@ -24,7 +24,7 @@
 		cat("nrow=", nrow(ds), "\n")
 		
 		res$tb= d= ldply(ds,  function(x)df(class= class(x)
-									, Missing= sum(is.na(x)), notMissing= sum(!is.na(x)), nValues= le(unique(x))
+									, Missing= sum(is.na(x)), notMissing= sum(!is.na(x)), not0= sum(x != 0), nValues= le(unique(x))
 									, shortCateg = (le(unique(x)) <= nValMax) 
 									#, {print(summary(x)); if(class(x)!='character') t(summary(x)[1:6]) else rep(7,6)}
 									, {print(summary(x)); if(class(x)!='character') t(summary(x)[1:6]) else  t(summary(-777)[1:6])}
@@ -53,10 +53,32 @@
 	
 	hee(da)
 	# he(sus(da, , sel= cn("isBad ServiceLevelId CustomerTypeId PaymentOptionId LimitAmt AccountId ScoreUtcDate AggregationStatusId BudgetTypeChanged PaymentInstrChanged DisplayURLChanged KwdPerDay MaxKwdPerCampaign SpikeKwdPerDay SpikeKwdPerCampaign BudgetPerDay MaxBudgetPerCampaign SpikeBudgetAmtPerDay SpikeBudgetAmtPerCampaign BudgetPerKwdPerDay MaxBudgetPerKwdPerCampaign SpikeBudgetPerKwdPerDay SpikeBudgetPerKwdPerCampaign MaxExactAmt SpikeExactAmt SpikeExactAmtPerDay SpikeExactAmtPerCampaign MaxPhraseAmt SpikePhraseAmt SpikePhraseAmtPerDay SpikePhraseAmtPerCampaign MaxBroadAmt SpikeBroadAmt SpikeBroadAmtPerDay SpikeBroadAmtPerCampaign MaxContentAmt SpikeContentAmt SpikeContentAmtPerDay SpikeContentAmtPerCampaign IsMsftAccount BlackListKwdCount HasNewKeywords KwdNewCategoryCount KwdExistingCategoryCount KwdCountInNewCategory KwdCountInExistingCategory KwdMaxPercentInNewCategoryPerCampaign isCatched")), 5)
-	
-	sp= spectr(da)
-	
+	xx= cn("ServiceLevelId CustomerTypeId PaymentOptionId LimitAmt AccountId AggregationStatusId BudgetTypeChanged PaymentInstrChanged DisplayURLChanged KwdPerDay MaxKwdPerCampaign SpikeKwdPerDay SpikeKwdPerCampaign BudgetPerDay MaxBudgetPerCampaign SpikeBudgetAmtPerDay SpikeBudgetAmtPerCampaign BudgetPerKwdPerDay MaxBudgetPerKwdPerCampaign SpikeBudgetPerKwdPerDay SpikeBudgetPerKwdPerCampaign MaxExactAmt SpikeExactAmt SpikeExactAmtPerDay SpikeExactAmtPerCampaign MaxPhraseAmt SpikePhraseAmt SpikePhraseAmtPerDay SpikePhraseAmtPerCampaign MaxBroadAmt SpikeBroadAmt SpikeBroadAmtPerDay SpikeBroadAmtPerCampaign MaxContentAmt SpikeContentAmt SpikeContentAmtPerDay SpikeContentAmtPerCampaign IsMsftAccount BlackListKwdCount HasNewKeywords KwdNewCategoryCount KwdExistingCategoryCount KwdCountInNewCategory KwdCountInExistingCategory KwdMaxPercentInNewCategoryPerCampaign")
 
+	sp= spectr(da)
+	da$AccountId
+	da$AggregationStatusId  #ScoreUtcDate
+	
+	xx2= cn("ServiceLevelId CustomerTypeId PaymentOptionId LimitAmt BudgetTypeChanged PaymentInstrChanged DisplayURLChanged KwdPerDay MaxKwdPerCampaign SpikeKwdPerDay SpikeKwdPerCampaign BudgetPerDay MaxBudgetPerCampaign SpikeBudgetAmtPerDay SpikeBudgetAmtPerCampaign BudgetPerKwdPerDay MaxBudgetPerKwdPerCampaign SpikeBudgetPerKwdPerDay SpikeBudgetPerKwdPerCampaign MaxExactAmt SpikeExactAmt SpikeExactAmtPerDay SpikeExactAmtPerCampaign MaxPhraseAmt SpikePhraseAmt SpikePhraseAmtPerDay SpikePhraseAmtPerCampaign MaxBroadAmt SpikeBroadAmt SpikeBroadAmtPerDay SpikeBroadAmtPerCampaign MaxContentAmt SpikeContentAmt SpikeContentAmtPerDay SpikeContentAmtPerCampaign IsMsftAccount BlackListKwdCount HasNewKeywords KwdNewCategoryCount KwdExistingCategoryCount KwdCountInNewCategory KwdCountInExistingCategory KwdMaxPercentInNewCategoryPerCampaign")
+	yxx2= cn("isBad ServiceLevelId CustomerTypeId PaymentOptionId LimitAmt BudgetTypeChanged PaymentInstrChanged DisplayURLChanged KwdPerDay MaxKwdPerCampaign SpikeKwdPerDay SpikeKwdPerCampaign BudgetPerDay MaxBudgetPerCampaign SpikeBudgetAmtPerDay SpikeBudgetAmtPerCampaign BudgetPerKwdPerDay MaxBudgetPerKwdPerCampaign SpikeBudgetPerKwdPerDay SpikeBudgetPerKwdPerCampaign MaxExactAmt SpikeExactAmt SpikeExactAmtPerDay SpikeExactAmtPerCampaign MaxPhraseAmt SpikePhraseAmt SpikePhraseAmtPerDay SpikePhraseAmtPerCampaign MaxBroadAmt SpikeBroadAmt SpikeBroadAmtPerDay SpikeBroadAmtPerCampaign MaxContentAmt SpikeContentAmt SpikeContentAmtPerDay SpikeContentAmtPerCampaign IsMsftAccount BlackListKwdCount HasNewKeywords KwdNewCategoryCount KwdExistingCategoryCount KwdCountInNewCategory KwdCountInExistingCategory KwdMaxPercentInNewCategoryPerCampaign")
+	
+	d2= ldply(da[,-c('ScoreUtcDate')], .(AccountId), function(x)df(mean, sd)	)
+	d2= ddply(sus(da,,-ScoreUtcDate), .(AccountId), function(x)df(colMeans(x))	)  #,colwise(sd)(x)
+	d2= ddply(sus(da,,-ScoreUtcDate), .(AccountId), function(x)df(mean(x[1]))	)  #,colwise(sd)(x)
+	d2= ddply(sus(da,,-ScoreUtcDate), .(AccountId), function(x)colwise(sd,xx2)	)  #,colwise(sd)(x)
+	d2= ddply(sus(da,,-ScoreUtcDate), .(AccountId), function(x)colwise(mean,xx2)	)  #,colwise(sd)(x)
+	
+	d2= ddply(sus(da,,-ScoreUtcDate), .(AccountId), colwise(mean,yxx2), colwise(sd,xx2)	)  #,colwise(sd)(x)
+	d2= ddply(sus(da,,-ScoreUtcDate), .(AccountId), colwise(sd,yxx2)	)  #,colwise(sd)(x)
+	hee(d2)
+	
+	# are there diff Y for accId ?
+	hee(sus(d2, isBad>0))
+	# 0  rows
+
+	
+	hee(sus(da,,-ScoreUtcDate),20) # sorted by LimitAmt  ?
+	
 	#'data.frame':	2153 obs. of  34 variables:
 	head(da)
 	table(da$isBAD)
@@ -68,17 +90,19 @@ typeof(da$BudgetTypeChanged)
 su= summary(da)
 su
 str(su)
-st1= str(da)
-str(st1)
+str(da)
 
-newwin(5,7,'qnorm',{
-			for(j in names(da)){catt(j,typeof(da[,j]), max(da[j])); 
-				qqnorm(da[,j], main=j)
+
+newwin(6,8,'qnorm',{
+			for(j in xx){ # j= 'ServiceLevelId'
+				catt(j,typeof(da[,j]), max(da[j])); 
+				#qqnorm(da[,j], main=j)
+				with(x<- ord(da[,c('isBad', j)], j), {plot(x[,j], col= isBad+1, main= j, xlab='', ylab='')})
 			}			
 },width=18, height=12)
 
 newwin(5,7,'qnorm-log',{
-			for(j in names(da)){catt(j,typeof(da[,j]), max(da[j])); 
+			for(j in xx){catt(j,typeof(da[,j]), max(da[j])); 
 				qqnorm(log1p(da[,j]), main=j)
 			}			
 },2,width=22, height=14)
