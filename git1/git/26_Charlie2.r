@@ -219,6 +219,14 @@ dL[, -grep('AccountId', na(dL))]= sapply(log2(1 + dL[, -grep('AccountId', na(dL)
 	
 	# Aggregation ==
 	dL.mn= ddply(dL, .(AccountId), colwise(mean))  #,colwise(sd)(x)
+	
+	if(0){ # or
+	
+		dL.mnw= df(ddply(dL, .(AccountId), colwise(mean)) 
+		       , w=ddply(dL, .(AccountId), nrow)[[2]])   #,colwise(sd)(x), xx=colwise(mean)
+		hee(dL.mnw)
+	
+	}
 	sapply(dL.mn, max, na.rm=T)
 	sapply(dL.mn, mean, na.rm=T)
 	sapply(da, mean, na.rm=T)
@@ -255,6 +263,19 @@ dL[, -grep('AccountId', na(dL))]= sapply(log2(1 + dL[, -grep('AccountId', na(dL)
 		# x
 		#    0    1 
 		# 5000  780 
+
+ 
+
+		x= tab(dL$AccountId)
+		hee(x,20)
+		tab(x)
+		# x
+		#   1   2   3   4   5   6   7 
+		# 643 244 150 126  90 122 359 
+
+	    # means: 150 accounts are 3 times
+
+
 
 		
 \\\
@@ -396,8 +417,14 @@ comboInfo
 # $linearCombos
 # list()
 
-xxy= dL.filtered
+xxy= dL.filtered # 5780 obs. of  23 variables:
 xxy$y= dL$isBad
+
+# or
+
+xxy= dL.mnw[] # 5780 obs. of  23 variables:
+xxy$y= dL.mnw$isBad
+
 
 # do not need ==
 `Centering and Scaling`={
@@ -576,12 +603,17 @@ xxy$y= dL$isBad
 
 }
 
-
-
+# or 
+xx= dL.mnw[ , xx.conf] #1734 obs. of  21 variables:  # w/o mn: 5780 obs. of  23 variables:
+y= dL.mnw$isBad # num [1:1734]
 
 
 #' Data Splitting
 set.seed(55)
+
+
+
+
 set1index <- createDataPartition(y, p = .8, list = FALSE, times = 5)
 hee(set1index)
 set1 <- y[set1index]
@@ -725,7 +757,10 @@ newwin(5,7,'qnorm daLn',{
 
 
 ds= daLn
-#-- end clear data
+#-- end clear and prepare data -------------
+
+
+
 
 # Prediction Model ======
 libra(randomForest)
@@ -743,11 +778,11 @@ libra(MASS) # stepAIC
 
 
 n.fold=10
-nr.good= sum(ds$y == 0)
-nr.bad = sum(ds$y != 0)
+nr.good= sum(y == 0)
+nr.bad = sum(y != 0)
 
 
-SampleFold= function(seed= 55, n.fold= 10, y= ds$y){
+SampleFold= function(seed= 55, n.fold= 10, y){
 	fold= y
         nr.good= sum(y == 0)
         nr.bad = sum(y != 0)
@@ -760,13 +795,34 @@ SampleFold= function(seed= 55, n.fold= 10, y= ds$y){
 	return(fold)
 }
 
-fold= SampleFold(seed=1, n.fold=10)
+fold= SampleFold(seed=1, n.fold=10, y=y)
+#    fold
+# y     1   2   3   4   5   6   7   8   9  10
+#   0 122 122 122 121 121 122 122 122 122 122
+#   1  51  52  51  52  51  52  52  51  52  52
+
 #       1   2   3   4   5   6   7   8   9  10
 #   0 185 184 183 185 185 185 185 185 184 185
 #   1  30  31  31  31  31  31  30  31  31  30
-head(fold)
+head(fold,20)
+#  [1]  9  1  9  7  9  2  4  6  1  5  4  8  7 10  2  6  6  5  1  2
+plot(jitter(fold), col= y+2)
 
-yhat= data.frame(y= ds$y)
+
+
+
+yhat= data.frame(y)
+for(f in c(randomForest)){#f=glm.fit glm.fit, 
+	#mode= f(xx,y); yhat[,deparse(f)]= predict(mode, xx)
+	m1= f(xx,y); #class(m1) = 'glm'
+	#m1= f(as.formula('y~xx'); class(m1) = 'glm'
+	str(m1)
+	print(class(m1))
+	
+	yhat[,deparse(substitute(f))]= predict(m1, xx)
+} 
+plot(yhat)
+
 
 st({
 	for(i.fold in 1:n.fold){ # i.fold=2
