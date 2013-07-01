@@ -1,0 +1,543 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><head><link rel="shortcut icon" href="/favicon.ico">
+
+				<!-- we need these 2 lines for the case if no Internet during the tutorial -->
+				<script src="T:/mathjax-MathJax-v2.2-8-g727332c/mathjax-MathJax-727332c/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+				<script src="T:/work/UseR-2013/lib/jquery-1.10.1.min.js"></script>
+				<!--  -->
+                
+				<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+				<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+
+				<!--script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.js"></script-->
+             
+				 <script type="text/x-mathjax-config">  MathJax.Hub.Config({ tex2jax: { inlineMath: [[" $ "," $ "]] } }) </script>
+				
+				<!-- script>
+				$(function(){
+				//$(".imgGal").draggable() ; //.parent().resizable();
+				$(".dimg").resizable().draggable(); 
+				// $(".pic").draggable();  //.resizable();;
+				});
+				</script -->
+				
+				
+				<script>
+				$(function(){
+					var d= document
+
+				//var imgFold= "<img src='https://ui.netbeans.org/docs/ui/code_folding/cf_minus.gif'/>"  // "(-)"
+				var imgFold= $(".aD:first").html()
+
+				$("img.imgGal")
+					.mouseover(function() {show(this)} )
+					.mouseout(function() {show(0)} )
+				    .click(function() {goto(this.id.replace("tn",""))})
+	                .dblclick(function() {ShowImg(this.name.replace(/\..*/, ""),  this.name.replace(/.*?\./, "")); })
+				;
+				$(".aD").click(function() { th= $(this)
+				th.next("div").toggle();
+				//alert(th.html()+ "\n" + imgFold)
+
+				th.html(th.html()== imgFold ? "..." : imgFold)
+				})
+                $("#aToggleAll").click(function() {th= $(this)
+		        if( th.text() =="(+)") {
+		        $("div").show(); th.html(imgFold); $("a:not(.comments)").html(imgFold)   
+		        } else { $("div").hide(); th.html("(+)"); $("a:not(.comments)").html("(+)")}
+                })
+                //   $(".aToggleAllPic").click(function() {$("img").toggle() })
+				
+				function toggleD(a, a2, di){ if( a.text() == "(+)") {
+				di.show(); a.html(imgFold); a2.html(imgFold)  
+				} else { di.hide(); a.html("(+)"); a2.html("...")}
+				}
+				
+				function ToggleComments2(){ 
+				var tt = document.getElementsByClassName("comment2"); 
+				var t0= tt[0].style.fontSize;
+				di= (t0 == "3px" || t0 == "") ? "12px" : ((t0 == "12px")? "1px" : "3px") ;
+				fc=  di == "1px" ? "white" : "green";
+				for (var i = 0; i < tt.length; i++) {tt[i].style.fontSize = di; tt[i].style.color=fc;}
+				}
+
+                $(".aToggle.DD1").click(function() {toggleD($(this), $(".H1 + + .aD"), $(".D1")) })
+                $(".aToggle.DD2").click(function() {toggleD($(this), $(".H2 + + .aD"), $(".D2")) })
+                $(".aToggle.DD3").click(function() {toggleD($(this), $(".H3 + + .aD"), $(".D3")) })
+                $(".aToggle.DD4").click(function() {toggleD($(this), $(".H4 + + .aD"), $(".D4")) })
+                $(".aToggle.TOC").click(function() {toggleD($(this), $(".zz"), $("div.TOC")) })
+                $(".aToggleAllPic").click(function() {toggleD($(this), $(".zz"), $("img")) })
+                $(".aToggleComments").click(function() {
+					ToggleComments2(); return;
+
+					c2= $(".comment2");	fs= c2.eq(0).css("font-size");
+					var tt = document.getElementsByClassName("comment2"); var t0= tt[0].style.fontSize;
+					//alert(fs + " | " + tt[0].innerHTML + " zz " + t0)
+					//alert(fs + " | " + t0.innerHTML)
+					//fsn= (fs == "3px" || fs == "") ? "12px" : ((fs == "12px")? "1px" : "3px");
+					fsn= (fs == "30px" || fs == "") ? "120px" : ((fs == "120px")? "10px" : "30px");
+					//alert(fs + " | " + tt[0].innerHTML + " t0: " + t0 + " fsn:" + fsn+ "|"+ " sp:" + $(".comment2:first + span").text())
+					$("#out").text(" || fs:" +fs + " | " + tt[0].innerHTML + " t0: " + t0 + " fsn:" + fsn+ "|"+ " sp:" + $(".comment2:first + span").text());
+					$(".comment2").css({"font-size": fsn, "font-size-adjust": .1});
+					//$(".comment2").css("font-size", "xx-small");
+					$(".comment2").text("zz");
+					$(".comment2").css("color",  c2.css("font-size")== "1px" ? "white" : "green")
+					})
+				
+				});
+				</script>
+				
+				<script><!--
+				var d= document;
+				
+				function goto(i) {w= d.location= "#" + i;}
+				
+				function ShowSVG(p){w= window.open("","","fullscreen=yes")
+				w.document.write("<html><iframe src='./img/"  + p + ".svg' width=1200  height=800/></html>")
+				w.focus()
+				}
+			    
+				function ShowImg(p, capt){w= window.open("","","type=fullWindow,fullscreen,location='',height="+ screen.height+ ",width="+screen.width)
+				w.document.write("<html><img src='./img/"  + p + ".png ' /><br/>" + p +  capt + "</html>")
+				w.document.title= p + capt;
+				w.focus()
+				}
+				
+				function resize(i) {e=d.getElementById(i); w= e.width;
+				e.style.width= (w==700)? 1000 :  (w==1000)? 1200 : (w==1200)? "100%" : 700;
+				}
+				
+				
+				function ToggleFold(d) {}
+				
+				
+				function show(e){
+				$("#show").css({display : (e==0)? "none" : "block", border: (e==0)? "0" : "2px solid blue"})
+				
+				if(e != 0){
+                x= Math.min(e.offsetLeft+ e.width + 10, 500) //x= e.x+ e.width + 10;// ; if(x > 500) x= 500;
+                y= e.offsetTop+ e.height + 10               //y= e.y+ e.height + 10
+				
+				$("#show").css({left: x, top: y})
+				$("#showPic").attr("src", e.src)
+				$("#showTxt").html("<br/>" +  e.name)  //  +  e.alt)
+				
+				/* show properties of e 
+				a=""
+				for(k in e) if(1 || e[k] > 10 && e[k]+" " < "a") a= a + "      e[" + k + "]= " + e[k];
+				alert (a);
+				/**/
+			
+				};
+				}
+				
+				//--></script>
+				
+				<style>  /*  www.w3schools.com/cssref/css_colornames.asp  www.tizag.com/cssT/border.php */
+				div.main {font-family: monospace; white-space: pre;}
+                .D1, .D2, .D3, .D4, .D5  {background-color:rgba(255,240,240, .2); border-style:ridge; margin:5px; padding:15px;-moz-border-radius:5px; border-radius:5px} /*div {; opacity: 0.3; background-color:GhostWhite; border-left-style:ridge;}  */
+				div.TOC {background-color:rgb(248,248,255); }	
+				div.D5 {font-size:8px;} 
+				//.sq {font-size:12px; font-family: Arial; color:DodgerBlue } 
+				center, .capt {font-size:12px; font-weight:bold; font-family: Arial; margin:auto; text-align:center;}
+				.captTOC {font-size:12px; font-weight:bold; font-family: Arial; align:left}
+				H1,  H2,  H3,  H4,  H5 {color:blue; font-family: Arial; color:teal;}
+				.H1, .H2, .H3, .H4, .H5 {color:teal; font-family: Arial; font-weight:bold;  display:inline-block; display:-moz-inline-box;}
+				H1, .H1 {font-size:36px;  margin-top:36px;  margin-bottom:8px;  margin-left:0px; } 
+				H2, .H2 {font-size:28px;  margin-top:28px;  margin-bottom:5px;  margin-left:20px;} 
+				H3, .H3 {font-size:24px;  margin-top:15px;  margin-bottom:3px;  margin-left:40px;}
+				H4, .H4 {font-size:18px;  margin-top:12px;  margin-bottom:2px;  margin-left:60px;}
+				H5, .H5 {font-size:14px;  margin-top:10px;  margin-bottom:1px;  margin-left:80px;}
+				img.pic, .captTOC, img.tnTOC {margin-top:0px;   margin-bottom:0px;  margin-left:80px;}
+				span.captTOC, img.tnTOC { display: block;}
+				.D77 { display:inline; }
+				iframe {border-style:none}
+				/* .dimg{height:90px;  display:inline-block;} /* position:fixed;  position:absolute;*/ 
+                .imgGal{margin-top:1px;   margin-bottom:1px;  margin-left:1px; height:100px} /*height:100%; max-width:100%; max-height:100%; }/* position:absolute; fixed;*/ 
+				
+				.fun {color:indigo; font-weight:bold;}
+				.comment {color:green; align:left}
+				.comment2 {color: rgb(100,200,100); font-size:3px; -webkit-text-size-adjust: none;}
+				.text, .sq {color: teal; font-size:12px;}
+				</style>
+				</head><body>
+		# <a href="#" id= "aToggleAll">Fold</a> All |
+				<a href="#" class= "aToggleAllPic">Toggle</a> all pics | 
+				<a href="#" class= "aToggle TOC">Fold</a> contents |
+				<a href="#" class= "aToggle DD2">Fold</a> H2 |
+				<a href="#" class= "aToggle DD3">Fold</a> H3 |
+				<a href="#" class= "aToggle DD4">Fold</a> H4 |
+				<a href="#" class= "aToggleComments">ToggleComments</a> <span id="out"></span>
+				<div class="TOC" id="0"> <H3>Gallery for  
+T:/work/UseR-2013/97_tutorial-demo/97_tutorial-demo.r
+ </H3>
+<img id="tn141" class="imgGal" src="img/Pic_1.png" name="	    Pic_1. Noisy   $ x^2, \; \sigma= 1000 \quad ( \LaTeX ) $ " height=100> 
+<img id="tn215" class="imgGal" src="img/Pic_2.png" name="	Pic_2. Noisy  $ -x^2 $ " height=100> 
+<img id="tn223" class="imgGal" src="img/Pic_4.png" name="		Pic_4. qqplot: Noisy  $ - x^2 $ " height=100> 
+<img id="tn249" class="imgGal" src="img/Pic_3.png" name="	Pic_3. Pairs xyy" height=100> 
+<hr/><H2>Contents</H2>
+<br/><br/> <span class="comment2">#==</span> <span class="H3" id="tnTOC12" onClick="goto('12');">init</span> <span class="comment2"> ===</span> 
+<br/><span class="comment2">#====</span> <span class="H1" id="tnTOC71" onClick="goto('71');"> Demo Code2HTML() - Header 1</span> <span class="comment2"> ====</span>
+<br/><span class="comment2">#===</span> <span class="H2" id="tnTOC92" onClick="goto('92');"> Example Header 2 </span> <span class="comment2"> ===</span>
+<br/><span class="comment2">#==</span> <span class="H3" id="tnTOC93" onClick="goto('93');"> Example Header 3 </span> <span class="comment2"> ==</span>
+<br/><span class="comment2">#=</span> <span class="H4" id="tnTOC94" onClick="goto('94');"> Example Header 4 </span> <span class="comment2"> =</span>
+<br/><span class="comment2">#==</span> <span class="H3" id="tnTOC96" onClick="goto('96');"> Features: </span> <span class="comment2"> ==</span>
+<br/><span class="comment2">#=</span><span class="H5" id="tnTOC105" onClick="goto('105');">  Classic Header 1</span> <span class="comment2"></span>
+<br/><span class="comment2">#=</span> <span class="H4" id="tnTOC106" onClick="goto('106');"> Classic Header 2 </span> <span class="comment2"> =</span>
+<br/><span class="comment2">#==</span> <span class="H3" id="tnTOC107" onClick="goto('107');"> Classic Header 3 </span> <span class="comment2"> ==</span>
+<br/><span class="comment2">#===</span> <span class="H2" id="tnTOC108" onClick="goto('108');"> Classic Header 4 </span> <span class="comment2"> ===</span>
+<br/><span class="comment2">#====</span> <span class="H1" id="tnTOC109" onClick="goto('109');"> Classic Header 5 </span> <span class="comment2"> =====</span>
+<br/><br/> <span class="comment2">#===</span> <span class="H2" id="tnTOC114" onClick="goto('114');"> Block Header 2 </span> <span class="comment2"> === </span> 
+<br/><br/>	 <span class="comment2">#==</span> <span class="H3" id="tnTOC116" onClick="goto('116');">   Block Header 3 </span> <span class="comment2"> ==  DT()  2013-06-24 13:46</span> 
+
+								<img id="tnTOC141" class="tnTOC" src="img/Pic_1.png" width=400 onClick="goto(141);" ondblclick="ShowImg('Pic_1', '. Noisy   &nbsp;&nbsp; $ x^2, \; \sigma= 1000 \quad ( \LaTeX ) $ ');" name="Pic_1. Noisy   $ x^2, \; \sigma= 1000 \quad ( \LaTeX ) $ "/>   
+								<span class="captTOC" onClick="goto('tnTOC141');" ondblclick="ShowImg('Pic_1', '. Noisy   $ x^2, \; \sigma= 1000 \quad ( \LaTeX ) $ ')">	    <span class="comment"># Pic_1. Noisy   $ x^2, \; \sigma= 1000 \quad ( \LaTeX ) $ &nbsp;&nbsp; </span></span>
+<br/>		<span class="comment2">#=</span> <span class="H4" id="tnTOC145" onClick="goto('145');"> Header 4 </span> <span class="comment2"> =</span>
+<br/>	<span class="comment2">#==</span> <span class="H3" id="tnTOC153" onClick="goto('153');"> Usage of  &nbsp;&nbsp; $ \LaTeX $ &nbsp;&nbsp; and quoted multiline text </span> <span class="comment2"> == </span>
+<br/><br/>	plot2= function() <span class="comment2">#==</span> <span class="H3" id="tnTOC204" onClick="goto('204');">   Block Header 3 - 2 - inside function </span> <span class="comment2"> ==================================================== </span> 
+
+								<img id="tnTOC215" class="tnTOC" src="img/Pic_2.png" width=400 onClick="goto(215);" ondblclick="ShowImg('Pic_2', '. Noisy  &nbsp;&nbsp; $ -x^2 $ ');" name="Pic_2. Noisy  $ -x^2 $ "/>   
+								<span class="captTOC" onClick="goto('tnTOC215');" ondblclick="ShowImg('Pic_2', '. Noisy  $ -x^2 $ ')">	<span class="comment"># Pic_2. Noisy  $ -x^2 $ &nbsp;&nbsp; </span></span>
+<br/><br/>	 <span class="comment2">#==</span> <span class="H3" id="tnTOC219" onClick="goto('219');"> Block Header 3 - 3  - ggplot </span> <span class="comment2"> ==</span> 
+
+								<img id="tnTOC223" class="tnTOC" src="img/Pic_4.png" width=400 onClick="goto(223);" ondblclick="ShowImg('Pic_4', '. qqplot: Noisy  &nbsp;&nbsp; $ - x^2 $ ');" name="Pic_4. qqplot: Noisy  $ - x^2 $ "/>   
+								<span class="captTOC" onClick="goto('tnTOC223');" ondblclick="ShowImg('Pic_4', '. qqplot: Noisy  $ - x^2 $ ')">		<span class="comment"># Pic_4. qqplot: Noisy  $ - x^2 $ &nbsp;&nbsp; </span></span>
+
+								<img id="tnTOC249" class="tnTOC" src="img/Pic_3.png" width=400 onClick="goto(249);" ondblclick="ShowImg('Pic_3', '. Pairs xyy');" name="Pic_3. Pairs xyy"/>   
+								<span class="captTOC" onClick="goto('tnTOC249');" ondblclick="ShowImg('Pic_3', '. Pairs xyy')">	<span class="comment"># Pic_3. Pairs xyy</span></span>
+<br/><br/>	 <span class="comment2">#==</span> <span class="H3" id="tnTOC256" onClick="goto('256');"> rCharts  </span> <span class="comment2"> == </span> 
+<br/>		<span class="comment2">#==</span> <span class="H3" id="tnTOC257" onClick="goto('257');">Installation of rCharts</span> <span class="comment2"> ==</span>
+<br/><br/>if(0)   <span class="comment2">#==</span><span class="H5" id="tnTOC300" onClick="goto('300');"> Misc</span> <span class="comment2"></span> 
+</div><p/><br/><br/>
+				<!-- pre --><div class="main">
+<span class="comment">#! /usr/bin/Rscript --vanilla --slave</span>
+<span class="comment"># Project  : 97_tutorial-demo</span>
+<span class="comment"># File     : 97_tutorial-demo/97_tutorial-demo.r</span>
+<span class="comment"># Author   : Alex Zolotoviski, alex@zolot.us</span>
+<span class="comment"># Created  : 2013-06-24 02:55:55</span>
+<span class="comment"># License  : GPL-2  </span>
+<span class="comment">###############################################################################</span>
+
+<span class="comment">## before:  CreateNewProj(newProj.name= '97_tutorial-demo', Templ.dir= 'T:/work/UseR-2013/lib/newProjTemplName', root='T:/work/UseR-2013')</span>
+
+
+{ <span class="comment2">#==</span> <span class="H3" id="12" onClick="goto('tn12');">init</span> <span class="comment2"> ===</span> <a href="javascript:ToggleFold('D12')" class="aD"><img src='https://ui.netbeans.org/docs/ui/code_folding/cf_minus.gif'/></a><div class="D3" id="D12">
+	rm(list=ls(envir = .GlobalEnv), envir = .GlobalEnv)
+	
+	options(help='html', digits=4, width=2160, scipen=5, editor='C:\\Program Files (x86)\\Notepad++\\notepad++.exe'
+			, error= NULL) <span class="comment"># options(error= recover) options(error=dump)  #or options(error=NULL)</span>
+
+	onWin= Sys.getenv('R_PLATFORM')==''
+	if(onWin){root= 'T:/work/UseR-2013'; 	memory.limit(size=9000)}  else root= '/home/azolotovitski/work'  <span class="comment"># memory.limit()</span>
+	
+	<span class="comment">#source(file.path(root, 'lib/zBase0.r'))  </span>
+	source('T:/work/UseR-2013/lib/zBase0.r')  <span class="comment"># <font color="red">xxx: hard coded path to zBase.r</font></span>
+	<span class="comment">#source('T:/work/UseR-2013/lib/zBase1.r')  </span>
+	source('T:/work/UseR-2013/lib/zCode.r')  
+	<span class="comment">#source('T:/work/UseR-2013/lib/zStats.r')  </span>
+	
+	
+	library(zBase0)
+	libra(zCode)
+	
+	libra(plyr)  <span class="comment">##  = install if necessary && require</span>
+
+	<span class="comment">#libra(R2HTML) </span>
+	<span class="comment">#libra(XLConnect)</span>
+	
+	<span class="comment">#	libra(Defaults)</span>
+	<span class="comment">#	setDefaults(legend, bty='n')</span>
+	<span class="comment">#	setDefaults(symbols, inc=.15)</span>
+	
+	libra(RColorBrewer)  <span class="comment"># display.brewer.all()</span>
+	palette(c(adjustcolor(cn('grey50 green3 red2'), alpha.f = .9), brewer.pal(8,"Dark2")))  <span class="comment">##ex: plot(1:19, pch=16, col=1:19, cex=3)</span>
+	
+	<span class="comment">#libra(randomForest)</span>
+	<span class="comment">#libra(plotrix)  # addtable2plot</span>
+	
+	libra(ggplot2)  <span class="comment"># no package called 'digest'</span>
+	<span class="comment">#libra(scales)</span>
+	<span class="comment">#libra(Cairo);  </span>
+	
+	proot= fp(root, '97_tutorial-demo')  <span class="comment"># project root</span>
+	sw(fp(proot, 'out'))
+	
+		
+	theFile= fp(proot, '97_tutorial-demo.r')
+	
+	HHp.bak= HHp   ; HHp=dummy ; <span class="comment">#  HHp= HHp.bak   # to rerun w/o change images</span>
+	HHjp.bak= HHjp ; HHjp=dummy; <span class="comment">#  HHjp= HHjp.bak   # to rerun w/o change images</span>
+	sa.bak= sa     ; sa=dummy  ; <span class="comment">#  sa= sa.bak   # to rerun w/o change images</span>
+
+
+	<span class="comment"># dett()   ## detach redundant packages</span>
+	<span class="comment"># gff('saved', theFile)</span>
+	<span class="comment"># rmDF(); loo(); lo(); lsDF();</span>
+
+</div><b>}</b> <span class="comment2">#--</span>
+<span class="comment">##########################################################</span>
+
+<span class="comment"># <font color="red">TODO: room around (-)</font></span>
+
+
+<span class="comment2">#====</span> <span class="H1" id="71" onClick="goto('tn71');"> Demo Code2HTML() - Header 1</span> <span class="comment2"> ====</span>
+<span class="comment2">#'</span><span class="text">  === Key points </span>
+<span class="comment2">#'</span><span class="text">  == CreateProject()</span>
+<span class="comment2">#'</span><span class="text">     init, libra()</span>
+<span class="comment2">#'</span><span class="text"> </span>
+<span class="comment2">#'</span><span class="text">  == Remind objects:</span>
+<span class="comment2">#'</span><span class="text">     DT(), st(), hee(), HHp()</span>
+<span class="comment2">#'</span><span class="text">  </span>
+<span class="comment2">#'</span><span class="text">  == Save state:</span>
+<span class="comment2">#'</span><span class="text">     sa()</span>
+<span class="comment2">#'</span><span class="text">     Code2HTML()</span>
+<span class="comment2">#'</span><span class="text">     exit location</span>
+<span class="comment2">#'</span><span class="text">  </span>
+<span class="comment2">#'</span><span class="text">  == Restore  state:</span>
+<span class="comment2">#'</span><span class="text">     rmall(); rmDF()</span>
+<span class="comment2">#'</span><span class="text">     init()</span>
+<span class="comment2">#'</span><span class="text">     loo()</span>
+<span class="comment2">#'</span><span class="text">     gff('saved')</span>
+<span class="comment2">#'</span><span class="text">     lo()</span>
+<span class="comment2">#'</span><span class="text">     lsDF()</span>
+
+<span class="comment2">#===</span> <span class="H2" id="92" onClick="goto('tn92');"> Example Header 2 </span> <span class="comment2"> ===</span>
+<span class="comment2">#==</span> <span class="H3" id="93" onClick="goto('tn93');"> Example Header 3 </span> <span class="comment2"> ==</span>
+<span class="comment2">#=</span> <span class="H4" id="94" onClick="goto('tn94');"> Example Header 4 </span> <span class="comment2"> =</span>
+
+<span class="comment2">#==</span> <span class="H3" id="96" onClick="goto('tn96');"> Features: </span> <span class="comment2"> ==</span>
+<span class="comment2">#'</span><span class="text">		1. Transforms .R file into  self-documented  .html file, containing all R code with output pics, headers and table of contents.</span>
+<span class="comment2">#'</span><span class="text">		2. The titles in body and contents are clickable to navigate from contents to body and back.</span>
+<span class="comment2">#'</span><span class="text">		3. The pics are clickable to resize.</span>
+<span class="comment2">#'</span><span class="text">		4. The html file has partly R syntax highlighted.  It is possible to do the full R syntax highlighting in resulting html, but the result file becomes almost twice heavier.</span>
+<span class="comment2">#'</span><span class="text">		5. Parts of the result html file could be folded.</span>
+<span class="comment2">#'</span><span class="text">		6. If you in browser fold TOC, select all, copy and paste to a text editor,  you should get the pure original R file.</span>
+<span class="comment2">#'</span><span class="text">		7. If you in browser select all, copy and paste to a MS Word, pics are resizable.</span>
+
+<span class="comment2">#=</span><span class="H5" id="105" onClick="goto('tn105');">  Classic Header 1</span> <span class="comment2"></span>
+<span class="comment2">#=</span> <span class="H4" id="106" onClick="goto('tn106');"> Classic Header 2 </span> <span class="comment2"> =</span>
+<span class="comment2">#==</span> <span class="H3" id="107" onClick="goto('tn107');"> Classic Header 3 </span> <span class="comment2"> ==</span>
+<span class="comment2">#===</span> <span class="H2" id="108" onClick="goto('tn108');"> Classic Header 4 </span> <span class="comment2"> ===</span>
+<span class="comment2">#====</span> <span class="H1" id="109" onClick="goto('tn109');"> Classic Header 5 </span> <span class="comment2"> =====</span>
+
+
+
+
+{ <span class="comment2">#===</span> <span class="H2" id="114" onClick="goto('tn114');"> Block Header 2 </span> <span class="comment2"> === </span> <a href="javascript:ToggleFold('D114')" class="aD"><img src='https://ui.netbeans.org/docs/ui/code_folding/cf_minus.gif'/></a><div class="D2" id="D114">
+	
+	{ <span class="comment2">#==</span> <span class="H3" id="116" onClick="goto('tn116');">   Block Header 3 </span> <span class="comment2"> ==  DT()  2013-06-24 13:46</span> <a href="javascript:ToggleFold('D116')" class="aD"><img src='https://ui.netbeans.org/docs/ui/code_folding/cf_minus.gif'/></a><div class="D3" id="D116">
+		st({  <span class="comment">## looong calculation <a href="javascript:ToggleFold('D77')" class="aD"><img src='https://ui.netbeans.org/docs/ui/code_folding/cf_minus.gif'/></a><div class="D77"></span>
+					n= 100
+					<span class="comment">#for(i in 1:1e6){</span>
+					for(i in 1:1e1){ <a href="javascript:ToggleFold('D77')" class="aD"><img src='https://ui.netbeans.org/docs/ui/code_folding/cf_minus.gif'/></a><div class="D77">
+							x= 1:n
+						y= x^2 + rnorm(le(x),, 1000)
+					</div><b>}</b>
+		</div><b>}</b>)  <span class="comment">#  13.04</span>
+
+		hee(df(x, y))
+		<span class="comment"># 100  rows</span>
+		<span class="comment">#   x       y</span>
+		<span class="comment"># 1 1  -78.76</span>
+		<span class="comment"># 2 2  308.67</span>
+		<span class="comment"># 3 3 -279.14</span>
+		<span class="comment"># # he(suss('y',, df(x, y), y &lt; 0, sel= cn("x y")), 5)</span>
+
+
+
+		
+		ww()  <span class="comment">## open window</span>
+		plot(x, y, ma= expression(Noisy ~ x^2~', ' ~ sigma ~ '= 1000'))
+		lines(lowess(y ~ x), lty=3, lwd=2, col=3)
+		HHp('Noisy x^2')
+
+								<img id="141" class="pic" src="img/Pic_1.png" width=700 onClick="resize(141);" ondblclick="ShowImg('Pic_1', '. Noisy   &nbsp;&nbsp; $ x^2, \; \sigma= 1000 \quad ( \LaTeX ) $ ');" name="Pic_1. Noisy   $ x^2, \; \sigma= 1000 \quad ( \LaTeX ) $ "/>   
+								<span class="capt" onClick="goto('tnTOC141');" ondblclick="ShowImg('Pic_1', '. Noisy   $ x^2, \; \sigma= 1000 \quad ( \LaTeX ) $ ')">	    <span class="comment"># Pic_1. Noisy   $ x^2, \; \sigma= 1000 \quad ( \LaTeX ) $ &nbsp;&nbsp; </span></span>
+
+		<span class="comment"># xPic_1. Noisy x^2   ## redundant pic</span>
+		
+		<span class="comment2">#=</span> <span class="H4" id="145" onClick="goto('tn145');"> Header 4 </span> <span class="comment2"> =</span>
+<span class="comment2">		#'</span><span class="text"> Some commenting text</span>
+<span class="comment2">		#'</span><span class="text"> can be here</span>
+<span class="comment2">		#'</span><span class="text"> <font color="red">xxx: We need To Do something - include funcs from zBase.r; wrong borders of block 3</font></span>
+<span class="comment2">		#'</span><span class="text"> <font color="red">TODO: something else - demo for hee(), sa(), lo(), lsDF()</font></span>
+	</div><b>}</b> <span class="comment2">#--</span>
+	
+	
+	<span class="comment2">#==</span> <span class="H3" id="153" onClick="goto('tn153');"> Usage of  &nbsp;&nbsp; $ \LaTeX $ &nbsp;&nbsp; and quoted multiline text </span> <span class="comment2"> == </span>
+	{  <a href="javascript:ToggleFold('D77')" class="aD"><img src='https://ui.netbeans.org/docs/ui/code_folding/cf_minus.gif'/></a><div class="D77">
+	'
+	Any text can be 
+	between quotes or backticks, but if we need 
+	to use &nbsp;&nbsp; $ \LaTeX $ &nbsp;&nbsp; formulae, we should use symbol "@" instead of "\\",
+	including inline  &nbsp;&nbsp; $ y= 5 \sqrt{x_4^3} $ &nbsp;&nbsp; as well as stand along equations: 
+	
+	\begin{aligned}
+	\nabla \times \vec{\mathbf{B}} - \, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} & = \frac{4\pi}{c}\vec{\mathbf{j}} \\   \nabla \cdot \vec{\mathbf{E}} & = 4 \pi \rho \\
+	\nabla \times \vec{\mathbf{E}}\, + \, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} & = \vec{\mathbf{0}} \\
+	\nabla \cdot \vec{\mathbf{B}} & = 0 \end{aligned}
+	'
+	
+<span class="sq">	`
+	or between backticks:
+	
+	<div style="font-size: 250%;">
+	$$  g\frac{d^2u}{dx^2} + L\sin u = 0 ; \quad  \sum_{n=1}^\infty {1\over n^2} = {\pi^2\over 6}  $$
+	or
+	\[
+	\int\limits_{x^2 + y^2 \leq R^2} f(x,y)\,dx \,dy
+	= \int\limits_{\theta=0}^{2\pi}\ \int\limits_{r=0}^R f(r\cos\theta,r\sin\theta) r\,dr\,d\theta  
+	\]
+	or
+	$$
+	\int\limits_{x^3 + y^2 \leq R^2} f(x,y)\,dx \,dy
+	= \int\limits_{\theta=0}^{2\pi}\ \int\limits_{r=0}^R f(r\cos\theta,r\sin\theta) r\,dr\,d\theta  
+	$$
+	</div>
+	
+    &nbsp;&nbsp; $ \href{http://www.forkosh.com/mimetextutorial.html}{try} \quad \href{http://www.codecogs.com/latex/eqneditor.php}{\LaTeX} $ &nbsp;&nbsp; 
+	
+</span>	`= 0
+	
+	
+<span class="comment">#	 2. Behind reqular "#" or roxigen "#'" comments we can use single "\"  </span>
+<span class="comment">#		in  &nbsp;&nbsp; $ \LaTeX $  expressions, including inline  $ y= 5 \sqrt{x_4^3} $ &nbsp;&nbsp; as well as stand alone equations. </span>
+<span class="comment">#			</span>
+<span class="comment">#			                                                                                                                                                                                 </span>
+
+<span class="comment2">#'</span><span class="text">			or behind roxigen "#'" comments: </span>
+<span class="comment2">#'</span><span class="text">			</span>
+<span class="comment2">#'</span><span class="text">			$$  g\frac{d^2u}{dx^2} + L\sin u = 0 ; \quad  \sum_{n=1}^\infty {1\over n^2} = {\pi^2\over 6}  $$</span>
+<span class="comment2">#'</span><span class="text">			or</span>
+<span class="comment2">#'</span><span class="text">		$$	\int\limits_{x^2 + y^2 \leq R^2} f(x,y)\,dx\,dy  = \int\limits_{\theta=0}^{2\pi}\ \int\limits_{r=0}^R f(r\cos\theta,r\sin\theta) r\,dr\,d\theta   $$</span>
+
+</div><b>}</b>
+
+
+
+<span class="fun">	plot2= function</span>(){ <span class="comment2">#==</span> <span class="H3" id="204" onClick="goto('tn204');">   Block Header 3 - 2 - inside function </span> <span class="comment2"> ==================================================== </span> <a href="javascript:ToggleFold('D204')" class="aD"><img src='https://ui.netbeans.org/docs/ui/code_folding/cf_minus.gif'/></a><div class="D3" id="D204">
+		group &lt;&lt;- sample(cn('A B'), le(x), re=T)
+		y2 &lt;&lt;- - x^2 + 3000 * (group == 'B') + rnorm(le(x),, 2000)
+		
+		ww()
+		plot(x, y2, ma='Noisy -x^2', col= 1+ nuf(group), pch=20)
+		lines(lowess(y2 ~ x), lty=3, lwd=3, col=6)
+	</div><b>}</b> <span class="comment2">#--</span>
+	plot2()
+	
+	HHp('Noisy  &nbsp;&nbsp; $ -x^2 $ &nbsp;&nbsp; ',, F)
+
+								<img id="215" class="pic" src="img/Pic_2.png" width=700 onClick="resize(215);" ondblclick="ShowImg('Pic_2', '. Noisy  &nbsp;&nbsp; $ -x^2 $ ');" name="Pic_2. Noisy  $ -x^2 $ "/>   
+								<span class="capt" onClick="goto('tnTOC215');" ondblclick="ShowImg('Pic_2', '. Noisy  $ -x^2 $ ')">	<span class="comment"># Pic_2. Noisy  $ -x^2 $ &nbsp;&nbsp; </span></span>
+
+	<span class="comment"># xPic_3. Noisy   &nbsp;&nbsp; $  -x^2 $ &nbsp;&nbsp; </span>
+	
+	{ <span class="comment2">#==</span> <span class="H3" id="219" onClick="goto('tn219');"> Block Header 3 - 3  - ggplot </span> <span class="comment2"> ==</span> <a href="javascript:ToggleFold('D219')" class="aD"><img src='https://ui.netbeans.org/docs/ui/code_folding/cf_minus.gif'/></a><div class="D3" id="D219">
+		ww()
+		qplot(x, y2, col= fa(group), main='Noisy -x^2', geom=cn('point smooth'))
+		HHp('qqplot: Noisy  &nbsp;&nbsp; $ x^2 $ &nbsp;&nbsp; ')
+
+								<img id="223" class="pic" src="img/Pic_4.png" width=700 onClick="resize(223);" ondblclick="ShowImg('Pic_4', '. qqplot: Noisy  &nbsp;&nbsp; $ - x^2 $ ');" name="Pic_4. qqplot: Noisy  $ - x^2 $ "/>   
+								<span class="capt" onClick="goto('tnTOC223');" ondblclick="ShowImg('Pic_4', '. qqplot: Noisy  $ - x^2 $ ')">		<span class="comment"># Pic_4. qqplot: Noisy  $ - x^2 $ &nbsp;&nbsp; </span></span>
+
+		<span class="comment"># xPic_2. qqplot: Noisy - x^2</span>
+	</div><b>}</b> <span class="comment2">#--</span>
+	
+	sa()
+	<span class="comment"># 2013-06-24 14:54:46:: Image saved: lo('T:/work/UseR-2013/97_tutorial-demo/out/.RData'); sw('T:/work/UseR-2013/97_tutorial-demo/out')  # rmDF(); lsDF(); dir(); expl()</span>
+	cc()
+	<span class="comment">##  now we can leave the project ----</span>
+
+	
+	xyy= df(x, y1= y, y2, group)
+	hee(xyy)
+	<span class="comment"># 100  rows</span>
+	<span class="comment">#   x      y1      y2 group</span>
+	<span class="comment"># 1 1  -78.76  1833.8     B</span>
+	<span class="comment"># 2 2  308.67  -911.7     A</span>
+	<span class="comment"># 3 3 -279.14   136.7     A</span>
+	<span class="comment"># # he(suss(,, xyy, , sel= cn("x y1 y2 group")), 5)</span>
+	he(suss('y',, xyy, y1 &gt; 0, sel= cn("x y1 y2 group")), 5)
+
+	
+	ww()
+	plot(xyy, col= 1+nu(xyy$group))
+	mtext('Pairs',,3)
+	HHp('Pairs xyy')
+
+								<img id="249" class="pic" src="img/Pic_3.png" width=700 onClick="resize(249);" ondblclick="ShowImg('Pic_3', '. Pairs xyy');" name="Pic_3. Pairs xyy"/>   
+								<span class="capt" onClick="goto('tnTOC249');" ondblclick="ShowImg('Pic_3', '. Pairs xyy')">	<span class="comment"># Pic_3. Pairs xyy</span></span>
+	
+
+	sa('with_xyy')  <span class="comment">##  xyy is large and rare used</span>
+	<span class="comment"># 2013-06-24 14:56:15:: Image saved: lo('T:/work/UseR-2013/97_tutorial-demo/out/with_xyy.RData'); sw('T:/work/UseR-2013/97_tutorial-demo/out')  # rmDF(); lsDF(); dir(); expl()</span>
+	
+	
+	{ <span class="comment2">#==</span> <span class="H3" id="256" onClick="goto('tn256');"> rCharts  </span> <span class="comment2"> == </span> <a href="javascript:ToggleFold('D256')" class="aD"><img src='https://ui.netbeans.org/docs/ui/code_folding/cf_minus.gif'/></a><div class="D3" id="D256">
+		<span class="comment2">#==</span> <span class="H3" id="257" onClick="goto('tn257');">Installation of rCharts</span> <span class="comment2"> ==</span>
+		<span class="comment"># libra(devtools)</span>
+		<span class="comment">#		package 'brew' successfully unpacked and MD5 sums checked</span>
+		<span class="comment">#		package 'formatR' successfully unpacked and MD5 sums checked</span>
+		<span class="comment">#		package 'markdown' successfully unpacked and MD5 sums checked</span>
+		<span class="comment">#		package 'httr' successfully unpacked and MD5 sums checked</span>
+		<span class="comment">#		package 'RCurl' successfully unpacked and MD5 sums checked</span>
+		<span class="comment">#		package 'memoise' successfully unpacked and MD5 sums checked</span>
+		<span class="comment">#		package 'whisker' successfully unpacked and MD5 sums checked</span>
+		<span class="comment">#		package 'roxygen2' successfully unpacked and MD5 sums checked</span>
+		<span class="comment">#		package 'knitr' successfully unpacked and MD5 sums checked</span>
+		<span class="comment">#		package 'devtools' successfully unpacked and MD5 sums checked</span>
+		
+		<span class="comment"># install_github('rCharts', 'ramnathv')  # nOK</span>
+		
+		<span class="comment"># libra(RJSONIO)</span>
+		<span class="comment"># libra(yaml)</span>
+		<span class="comment">#  C:\&gt;z\eclipse\R-2.14.2\bin\x64\R.exe  --vanilla CMD INSTALL C:\Users\azolotovitski\Downloads\rCharts-master\rCharts-master</span>
+	
+		
+		require(rCharts)
+		p1 &lt;- hPlot(y2 ~ x,  size="x", group="group", data=xyy, type = "line", dom='zzz', title = "rChart", subtitle = "xyy, by group")  <span class="comment"># http://www.polychartjs.com/demo?bubble_chart</span>
+		<span class="comment">#p1 &lt;- hPlot(y1 ~ x,  size="x", group="group", data=xyy, type = "bubble", dom='zzz', title = "rChart", subtitle = "xxy")  # http://www.polychartjs.com/demo?bubble_chart</span>
+		<span class="comment">#p1 &lt;- rPlot(conc ~ uptake | Treatment, data = CO2, color = "Plant", size="uptake", type = "point", dom='zzz')  # http://www.polychartjs.com/demo?bubble_chart</span>
+		p1$chart(zoomType = "xy")
+		p1$show()
+		
+		HHjp(p1, "rCharts xyy, by group")
+
+
+ <iframe src="img/jPic_1.htm" width="100%" height="600px"></iframe>
+
+ 		<span class="comment"># jPic_1. rCharts xyy, by group</span>
+		
+	</div><b>}</b>
+	
+	cc()
+	<span class="comment"># expl("file://T:/work/UseR-2013/97_tutorial-demo/97_tutorial-demo.r.T.htm")</span>
+
+	
+	
+</div><b>}</b> <span class="comment2">#--</span>
+
+
+
+
+
+if(0){   <span class="comment2">#==</span><span class="H5" id="300" onClick="goto('tn300');"> Misc</span> <span class="comment2"></span> <a href="javascript:ToggleFold('D300')" class="aD"><img src='https://ui.netbeans.org/docs/ui/code_folding/cf_minus.gif'/></a><div class="D5" id="D300">
+	theFile= 'T:/work/UseR-2013/97_tutorial-demo/97_tutorial-demo.r'
+	gff('saved', theFile)
+	gff('sa\\(|===', theFile)
+	
+	theFile= fp(proot, '97_tutorial-demo.r')
+<span class="fun">	ccc= function</span>()code2HTML(theFile)
+	ccc()
+	
+	CreateNewProj(newProj.name= '94_zzz', Templ.dir= 'T:/work/UseR-2013/lib/newProjTemplName', root='T:/work/UseR-2013')
+</div><b>}</b> <span class="comment2">#--</span>
+</div><!-- /pre --><br>##   The HTML output of 
+T:/work/UseR-2013/97_tutorial-demo/97_tutorial-demo.r
+ was created on 
+2013-06-30 20:29:51
+; <a href="http://www.mathjax.org/demos/scaling-math/">test MathJax </a>
+<div id= "show" style= "position: absolute; left:-1000px; top:1px; border:solid blue; padding:5; display:none; background-color:white; -moz-border-radius: 10px; border-radius: 10px;">
+				<img id="showPic" src="" height="400px" style="left:0px"/><br/>
+				<span id="showTxt"></span>
+				</div></body></html>

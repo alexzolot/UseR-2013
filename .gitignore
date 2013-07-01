@@ -1,5 +1,18 @@
+*.csv
+*.tsv
+*.zip
+*.log
+\.*
+
+
+
 # History files
 .Rhistory
 
 # Example code in package build process
 *-Ex.R
+.Rproj.user
+
+#= dir =
+eclipse*/**/*
+

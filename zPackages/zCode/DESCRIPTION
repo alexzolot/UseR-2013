@@ -1,0 +1,9 @@
+Package: zCode
+Type: Package
+Title: Helper functions for work with code and file system
+Version: 1.0
+Date: 2013-06-30
+Author: Alex Zolot
+Maintainer: Alex Zolot <Alex@Zolot.us>
+Description: Helper functions for work with code and file system
+License: GPL-2
