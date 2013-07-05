@@ -1,9 +1,10 @@
-# svn: https://subversion.assembla.com/svn/azsvn/
-# https://code/svn/medio/analytics/trunk/src/main/R/zBase.r  ticket: #MED-158
-# https://code/svn/medio/analytics/m3/datascience/iusv2/trunk/src/main/R/zBase.r
+# Author   : Alex Zolotoviski, azolotovitski@medio.com
+# Created  : 2013-06-24 02:55:55
+# License  : GPL-2  
 
 #=====  Funcs for Tutorial UseR!-2013  =====
 #=====  Funcs for data ansalysis, Descr Statistics and Predictive Modeling  =====
+
 require(zBase0)
 
 plotGLMCoeff= function(glm1, maxPVal= .082, nmax=12, obfusc=F, cox=F,...) {#==  

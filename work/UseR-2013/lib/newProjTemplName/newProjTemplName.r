@@ -1,7 +1,7 @@
 #! /usr/bin/Rscript --vanilla --slave
 # Project  : newProjTemplName
 # File     : newProjTemplName/newProjTemplName.r
-# Author   : Alex Zolotoviski, alex@zolot.us
+# Author   : Alex Zolotoviski, azolotovitski@medio.com
 # Created  : 00-00-00
 # License  : GPL-2
 ###############################################################################

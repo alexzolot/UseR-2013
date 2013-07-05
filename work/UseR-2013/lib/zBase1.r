@@ -1,10 +1,12 @@
-# svn: https://subversion.assembla.com/svn/azsvn/
-# https://code/svn/medio/analytics/trunk/src/main/R/zBase.r  ticket: #MED-158
-# https://code/svn/medio/analytics/m3/datascience/iusv2/trunk/src/main/R/zBase.r
+# Author   : Alex Zolotoviski, azolotovitski@medio.com
+# Created  : 2013-06-24 02:55:55
 # License  : GPL-2  
 
-require(zBase0)
+#=====  Funcs NOT Used  for Tutorial UseR!-2013  =====
+#=====  Helper Funcs may be used for work with code and file system  =====
 
+
+# require(zBase0)   # if executed after, overwrites source('zBase')
 
 
 #' misc  aliases and functions.
@@ -1310,7 +1312,7 @@ if(0){
 	libra(itertools)  # OK
 	libra(digest)     # OK
 
-	
+	# svn: https://subversion.assembla.com/svn/azsvn/
+	# https://code/svn/medio/analytics/trunk/src/main/R/zBase.r  ticket: #MED-158
+	# https://code/svn/medio/analytics/m3/datascience/iusv2/trunk/src/main/R/zBase.r	
 	}
-	
-#

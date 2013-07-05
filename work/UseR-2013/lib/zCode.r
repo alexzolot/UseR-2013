@@ -1,55 +1,35 @@
-# svn: https://subversion.assembla.com/svn/azsvn/
-# https://code/svn/medio/analytics/trunk/src/main/R/zBase.r  ticket: #MED-158
-# https://code/svn/medio/analytics/m3/datascience/iusv2/trunk/src/main/R/zBase.r
+# Author   : Alex Zolotoviski, azolotovitski@medio.com
+# Created  : 2013-06-24 02:55:55
+# License  : GPL-2  
+
 
 #=====  Funcs for Tutorial UseR!-2013  =====
 #=====  Helper Funcs for work with code and file system  =====
 
-# xxx : replace link to (-), js  to local
-# zzz : replace link to (-), js  to local
-# TODO : replace link to (-), js  to local
-# xxx: insert zBase func def
-# xxx: drop code2HTMLno.jQuery
-
-require(zBase0)
+# require(zBase0)   # if executed after, overwrites source('zBase')
 
 
-code2HTML= code2HTMLjQuery= function(theFile= 'm:/zzz.r', img='img', FullSyntaxHighlight= FALSE
+cc= code2HTML= code2HTMLjQuery= function(.theFile= theFile, img='img', FullSyntaxHighlight= FALSE
 								, classicHeaders=FALSE, show=TRUE, toSave=TRUE, outSuffix='.htm') {
 	if(FullSyntaxHighlight){   #== Full syntax highlight ==
 		catt('FullSyntaxHighlight')
 		libra(highlight)
-		s1= highlight(theFile, NULL, renderer = renderer_html( document = TRUE ))
+		s1= highlight(.theFile, NULL, renderer = renderer_html( document = TRUE ))
 		s1= gsub('\n$','',s1)
-		writeLines(s1, theFile %+% '.FSH.htm')
-	}else{s1= readLines(theFile, warn=F)
+		writeLines(s1, .theFile %+% '.FSH.htm')
+	}else{s1= readLines(.theFile, warn=F)
 	}  #--
 	
 	picss= list()
  	s1= gsub('<(\\s)', '&lt;\\1', s1)  # we suppose no blanks after "<" in <tag    in the input R code
-	#	s1= gsub('([^ ][^ ])<', '\\1&lt;', s1)  # we suppose 2 blanks before <tag  in the input R code
-	#	s1= gsub(' >', ' &gt;', s1)  # we suppose no blanks before > in  <tag>     in the input R code
 	s1= replaceTagsOutSq(s1)  # we suppose  <tag>  only in `` in the  R code
-	#s1= gsub('\\+', '\\\\', s1)  # drop escapes for LaTeX
 	s1= gsub('@@', '\\\\\\\\', s1)  # drop escapes for LaTeX
 	s1= gsub('(^|[^x"])@', '\\1\\\\', s1)  # drop escapes for LaTeX
 	
 	
-#	prr(s1[184:215], '+++++')
-#	
-#	if(0){
-#		catt('\\\\')
-#		catt(gsub('\\\\', '\\', '\\\\'))
-#		catt(gsub('aa', 'a', 'aa'))
-#		catt(gsub('aa', 'a', 'aaaaaaaa'))
-#	}
-	
 	#==  Set id  ==
 	for(i in 1:le(s1)){
-		#if(grepl(' Pic_\\d+', s1[i]))picss[[ch(i)]]= s1[i]
 		if(grepl('^\\s*#\\s* Pic_\\d+', s1[i])) picss[[ch(i)]]= s1[i]
-		#s1[i]= gsub('^([^\\~]*# *"?)(Pic_\\d+)(.*)', sf('<br/><img id="%s" src="%s/\\2.png" width=700 onClick="resize(%s);"/><br/>   <span class="capt" onClick="goto(\'tn%s\');">\\1\\2\\3</span><br/>', i, img, i, i), s1[i])
-		#s1[i]= gsub('^([^\\~]*# *"?)(jPic_\\d+)(.*)',{ f= gsub('.*(jPic_\\d+).*','\\1.htm' , s1[i]) ; p= pas(readLines(f),'\n','\n'); sf('%s\n\\1\\2\\3', p)} , s1[i])
 		
 		s1[i]= gsub('^([^\\~]*# *"?)(jPic_\\d+)(.*)','\n\n <iframe src="img/\\2.htm" width="100%" height="600px"></iframe>\n\n \\1\\2\\3' , s1[i])
 		
@@ -57,36 +37,27 @@ code2HTML= code2HTMLjQuery= function(theFile= 'm:/zzz.r', img='img', FullSyntaxH
 		s1[i]= gsub('^([^\\~]*# *"?)(Pic_\\d+)(.*)', sf('
 								<img id="%s" class="pic" src="%s/\\2.png" width=700 onClick="resize(%1$s);" ondblclick="ShowImg(\'\\2\', \'\\3\');" name="\\2\\3"/>   
 								<span class="capt" onClick="goto(\'tnTOC%1$s\');" ondblclick="ShowImg(\'\\2\', \'\\3\')">\\1\\2\\3</span>',  i, img), s1[i])
-								#<div class="capt" onClick="goto(\'tn%s\');" ondblclick="ShowImg(\'\\2\', \'\\3\')">\\1\\2\\3</div>',  i, img, i, i), s1[i])
 		s1[i]= gsub('(.*\\s*#==== )(.*)( =+.*)$', sf('\\1<span class="H1" id="%s" onClick="goto(\'tn%s\');">\\2</span> <span class="comment2">\\3</span>',i,i),  s1[i])
 		s1[i]= gsub('(.*\\s*#=== )(.*)( =+.*)$', sf('\\1<span class="H2" id="%s" onClick="goto(\'tn%s\');">\\2</span> <span class="comment2">\\3</span>',i,i),  s1[i])
 		s1[i]= gsub('(.*\\s*#== )(.*)( =+.*)$' , sf('\\1<span class="H3" id="%s" onClick="goto(\'tn%s\');">\\2</span> <span class="comment2">\\3</span>',i,i),  s1[i])
 		s1[i]= gsub('(.*\\s*#= )(.*)( =+.*)$'  , sf('\\1<span class="H4" id="%s" onClick="goto(\'tn%s\');">\\2</span> <span class="comment2">\\3</span>',i,i),  s1[i])
 		s1[i]= gsub('(.*\\s*#=+)([^=]*)$'      , sf('\\1<span class="H5" id="%s" onClick="goto(\'tn%s\');">\\2</span> <span class="comment2">\\3</span>',i,i),  s1[i])
-		#if(grepl('Pic_\\d+', s1[i]))picss[[ch(i)]]= s1[i]
+		s1[i]= gsub('id="(\\d+)" ', 'id="\\1" title="line \\1" ',  s1[i])
 	}	
 	
-	catt('666 picss:')
-	#zlply(picss, I)
-	print(picss)
 	
 	if(classicHeaders) for(i in 1:5) {s1= gsub(sf('class="H%s"', i),  sf('class= "H%s"', 6-i), s1)} 
 	
 	#= div for code folding ===
-	#s1= gsub('(\\{.*#=+ .*class="H)(\\d)(.* id=")(\\d+)(.*)','\\1\\2\\3\\4\\5 <a href="javascript:ToggleFold(\'D\\4\')" id="aD\\4">(-)</a> <div class="D\\2" id="D\\4" style="display:block;">', s1)
-	#s1= gsub('^(\\s*\\}.*#--.*)$','\\1 </div>', s1)
-	
 	depth= countDepth2(s1)
 	imgFold= '<img src=\'https://ui.netbeans.org/docs/ui/code_folding/cf_minus.gif\'/>'
 	
-	#s1= ifelse(depth!= 0, gsub('^([^#]*\\{[^\\{\\}]*)', '\\1 <a href="javascript:ToggleFold(\'D77\')" class="aD">(-)</a><div class="D77">', s1), s1)
 	s1= ifelse(depth!= 0, gsub('^([^#]*\\{[^\\{\\}]*)', sf('\\1 <a href="javascript:ToggleFold(\'D77\')" class="aD">%s</a><div class="D77">', imgFold), s1), s1)
 
 	s1= gsub('^(.* class="H(\\d)".* id="(\\d+).*)D77(.*) class="D77"' , '\\1D\\3\\4 class="D\\2" id="D\\3"', s1)
 	s1= ifelse(depth!= 0, gsub('([^#\\{\\}]*)\\}', '\\1</div><b>}</b>', s1), s1)
 	
-	attr(s1,"theFile")=  theFile
-	#s1= subSingleQuote2div(quote='^\\s*`[^\\`]*$', repl=c('<span class="sq">', '</span>'), s1)  # starts from `, single ` in line
+	attr(s1,".theFile")=  .theFile
 	s1= subSingleQuote2div(quote='^[^\\`]*`[^\\`]*$', pattNeg='\'\\`\'|\"\\`\"', repl=c('<span class="sq">', '</span>'), s1)  # starts from `, single ` in line
 	s1= gsub(" \\$ (.+) \\$ ",' &nbsp;&nbsp; $ \\1 $ &nbsp;&nbsp; ', s1)    #  inline math formula
 	
@@ -102,7 +73,6 @@ code2HTML= code2HTMLjQuery= function(theFile= 'm:/zzz.r', img='img', FullSyntaxH
 	
 	#==  prepare Table of Contents  ==	
 	toc= grep('img id=|<H\\d+|"H[1-5]', s1, v=T)
-	prr(toc[1:15], 666)
 	toc= gsub('"capt"', '"captTOC"', toc)
 	toc= gsub('class="pic"', 'class="tnTOC"', toc)
 	toc= gsub('700', '400', toc)  		# pics -> thumbnails
@@ -113,25 +83,12 @@ code2HTML= code2HTMLjQuery= function(theFile= 'm:/zzz.r', img='img', FullSyntaxH
 	toc= gsub('(.*)\\{', '<br/>\\1', toc)		# drop braces in TOC
 	toc= gsub('<a.*$', '', toc) # drop ends in TOC
 	toc= gsub('(.* class= *"H.".*)', '<br/>\\1', toc) # insert new lines
-	prr(toc[1:15], '777.TOC:')
 	
 	
 	#==  prepare Gallery  ==
-#	pics= grep('img', toc, v=T)
-#
-#	pics= gsub('<div .*div>', '', pics)  		
-#	pics= gsub('width=400', 'height=100', pics)  		# thumbnails -> small thumbnails
-#	pics= gsub('class="pic"', 'class="imgGal"', pics)  		
-	
-	pics2=laply(na(picss), function(np){p=  picss[[np]]; sf('<img id="tn%s" class="imgGal" src="img/%s.png" name="%s" height=100> '
+	pics= laply(na(picss), function(np){p=  picss[[np]]; sf('<img id="tn%s" class="imgGal" src="img/%s.png" name="%s" height=100> '
 						, np, gsub('.* (Pic_[0-9]+).*', '\\1', p)
 						, gsub('# *', '', p))})
-	pics=pics2
-
-#	catt('888. pics:', pics); prr(pics)
-#	catt('99. pics2:', pics2[1:2]); prr(pics2[1:2])
-#	str(pics)
-#	str(pics2)
 	
 	header= c('<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><head><link rel="shortcut icon" href="/favicon.ico">
 
@@ -149,11 +106,11 @@ code2HTML= code2HTMLjQuery= function(theFile= 'm:/zzz.r', img='img', FullSyntaxH
 				 <script type="text/x-mathjax-config">  MathJax.Hub.Config({ tex2jax: { inlineMath: [[" $ "," $ "]] } }) </script>
 				
 				<!-- script>
-				$(function(){
-				//$(".imgGal").draggable() ; //.parent().resizable();
-				$(".dimg").resizable().draggable(); 
-				// $(".pic").draggable();  //.resizable();;
-				});
+					$(function(){
+					//$(".imgGal").draggable() ; //.parent().resizable();
+					$(".dimg").resizable().draggable(); 
+					// $(".pic").draggable();  //.resizable();;
+					});
 				</script -->
 				
 				
@@ -286,7 +243,7 @@ code2HTML= code2HTMLjQuery= function(theFile= 'm:/zzz.r', img='img', FullSyntaxH
 				img.pic, .captTOC, img.tnTOC {margin-top:0px;   margin-bottom:0px;  margin-left:80px;}
 				span.captTOC, img.tnTOC { display: block;}
 				.D77 { display:inline; }
-				iframe {border-style:none}
+				img, .aD, iframe {border-style:none; border:0}
 				/* .dimg{height:90px;  display:inline-block;} /* position:fixed;  position:absolute;*/ 
                 .imgGal{margin-top:1px;   margin-bottom:1px;  margin-left:1px; height:100px} /*height:100%; max-width:100%; max-height:100%; }/* position:absolute; fixed;*/ 
 				
@@ -309,20 +266,19 @@ code2HTML= code2HTMLjQuery= function(theFile= 'm:/zzz.r', img='img', FullSyntaxH
 				<a href="#" class= "aToggle DD3">Fold</a> H3 |
 				<a href="#" class= "aToggle DD4">Fold</a> H4 |
 				<a href="#" class= "aToggleComments">ToggleComments</a> <span id="out"></span>
-				<div class="TOC" id="0"> <H3>Gallery for  ', theFile, ' </H3>'
-		, pics, '<hr/><H2>Contents</H2>', toc, '</div><p/><br/><br/>
-				<!-- pre --><div class="main">', main, '</div><!-- /pre --><br>##   The HTML output of ', theFile, ' was created on ', DT(), '; <a href="http://www.mathjax.org/demos/scaling-math/">test MathJax </a>'
-		, footer)
+				<div class="TOC" id="0"> <H3>Gallery for  ', .theFile, ' </H3>'
+			, pics, '<hr/><H2>Contents</H2>', toc, '<hr/></div> <p/><br/><br/>
+					<!-- pre --><div class="main">', main, '</div><!-- /pre --><br>##   The HTML output of ', .theFile, ' was created on ', DT(), '; <a href="http://www.mathjax.org/demos/scaling-math/">test MathJax </a>'
+			, footer)
 
 		if(toSave){
-			writeLines(out, theFile %+% outSuffix)
-			catf('expl("file://%s")', theFile %+% outSuffix)
-			if(show) expl("file://" %+% theFile %+% outSuffix)
+			writeLines(out, .theFile %+% outSuffix)
+			catf('expl("file://%s")', .theFile %+% outSuffix)
+			if(show) expl("file://" %+% .theFile %+% outSuffix)
 		}
-	invisible(list(theFile=theFile, header=header, pics=pics, toc=toc, main=main, footer=footer, out=out))
+	invisible(list(theFile=.theFile, header=header, pics=pics, toc=toc, main=main, footer=footer, out=out))
 }
-# code2HTML()
-cc= function()code2HTML(theFile) #  cc()
+#cc= function()code2HTML(theFile) #  cc()
 
 
 
@@ -345,18 +301,108 @@ CleanSparePics= function() { #==  Clean spare Pics  ==
 } #--
 
 
-gre2= function(patt='', pattNeg='^$', x, v=T, ...){ a=grepl(patt, x,...) & !grepl(pattNeg, x,...); return( if(v) x[a] else a) }
+ReleaseOut= function(vers='', exec=F) {
+	stopifnot(basename(gw()) ==  "out" && dirname(gw()) == dirname(theFile))
+	
+	outRelDir= sf('../out-%s%s', DT("%Y-%m-%d.%H-%M"), vers)
+	outFile= sf('%s/%s-%s.htm', gsub( basename(theFile), basename(outRelDir), theFile), basename(theFile), sf('%s%s', DT("%Y-%m-%d.%H-%M"), vers))
+	catf('\nreleaseOut: outRelDir= %s, outFile=%s\n', outRelDir, outFile)
+	catt('../img', ' --> ', sf('%s/img', outRelDir))
+	catt(sf('%s.htm', theFile), ' --> ', outFile)
+	
+	if(exec){
+		dir.create(outRelDir)
+		stopifnot(file.copy(theFile, outRelDir))
+		stopifnot(file.rename('../img', sf('%s/img', outRelDir)))
+		try(file.rename(sf('%s.htm', theFile), outFile), s=T)
+		sw('..', showWarnings=F)
+		stopifnot(file.rename('out', gsub('\\.\\.', '.', outRelDir) %+% '/out'))
+		sw('out')
+	}
+}
+# ReleaseOut(vers='.b', exec=T)
 
-gff= function(patt=' ===', pattNeg='^$', f= theFile, withLineNumb= T){ # grep pattern in the file
+
+
+#' =  make RWJournals =
+#' res<<-  is  produced as a side effect for case of error in cycle!!!
+MakeRWJournals= function(root='T:', patt='.*', pattNeg='^$', exec=F, ...) {
+	warning('List res<<-  is produced as a side effect for case of error in cycle, if(exec) !!!')
+	.res= list(); attr(.res, "par")=list(...)
+	if(exec) res <<- .res
+	on.exit(invisible(.res))
+	for(f in  gre2(patt, pattNeg, dir(root, all.files =T, patt='\\.r$', recursive= T))) {
+		catf('%3s. %s\n', le(.res), fp(root, f))
+		if(exec) res[[f]] <<- .res[[f]] <- code2HTMLjQuery(.theFile=fp(root, f), ...)  else .res[[f]]= 1
+	}
+	invisible(.res)
+}
+if(0) RWJournals= MakeRWJournals(root='M:', patt='71_UseR-2013-Tutorial.*59.zz', pattNeg='zExtraPacks|999|scripts|library|lib|fun|Base|code2HTML|86_testShiny'
+		, exec=F, show=T, toSave=T, outSuffix='.b.htm')
+
+
+createRWJalbum= function(RWJournals, fout= '../all.Pic.htm', outSuffix= attr(.res, "par")$outSuffix){  # outSuffix='.b.htm', outSuffix='.htm') {
+	out= c(RWJournals[[1]]$header
+			, sf('<script>
+					$(function(){
+								$("h3").each( function() {
+											var $th = $(this), href =  this.textContent.replace(/.* ([^ ]+) */, "$1")+ "%s";
+											$th.wrap("<a href=\'file:///" + href + "\' >")
+										});
+								$("img.imgGal").each( function() {
+											var $th = $(this), href =  this.alt +"%1$s#"  + this.id.replace("tn","");
+											$th.wrap("<a href=\'file:///" + href + "\' >")
+										});
+						$("h3").dblclick(function() {w= window.open(this.textContent.replace(/.* ([^ ]+) */, "$1")+ "%1$s", "", "fullscreen=yes");  w.focus() })
+						$("img.imgGal").dblclick(function() {w= window.open(this.alt +"%1$s#" + this.id.replace("tn",""), "","fullscreen=yes");  w.focus() })
+					  });
+					</script>', outSuffix)
+			, unlist(llply(RWJournals, function(x)c(' <H3>Gallery <SMALL> for  ', (x$theFile), '</SMALL></H3>'  #basename(x$theFile)
+										, gsub('src="', sf(' alt="%s" src="file:///%1$s/../', x$theFile), x$pics)
+								)))
+			, RWJournals[[1]]$footer)
+	writeLines(out, fout)
+	expl(fout) ; catf('expl("%s")', tools:::file_path_as_absolute(fout))
+}	
+# createRWJalbum(RWJournals, fout='../all.Pic.35.htm')
+# createRWJalbum(RWJournals.42b, fout='../RAlbum.42b.htm', outSuffix='.htm')
+
+
+gff= function(patt=' ===', pattNeg='gff', f= theFile, withLineNumb= T){ # grep pattern in the file
 	catt(3099,'============================ gff:', f)
 	s= readLines(f, warn=F)
 	ii= grepl(patt, s) & !grepl(pattNeg, s)
-	prr(x<- sf('%4s %s', if(withLineNumb) 1:le(s) %+% '.' else '', s)[ii])
+	x<- sf('%4s %s', if(withLineNumb) 1:le(s) %+% '.' else '', sub('^\\s*', '',s))[ii]
+	prr(x,,F)
 	invisible(x)   #ex: gff('IPH2ClickCountThreshold *=', 'OUTPUT|@EnableDebugg', f="M:/73_ShivaAegisAdjust/AegisCustomDataSourceView.templ-J.script")
 }
 
+#'  set of funcs to extract regex, wrappers for regexpr
+rege= function(patt, x) {y=regexpr(patt, x, 1);  substr(x, y, y + attr(y, "match.length")-1)}
+#rege('b.', cn('abcd xy 23b67b8'))
+# [1] "bc" ""   "b6"
 
-#= sub ... in file =
+# or
+rege= function(patt, x) {yy= regexec(patt, x, 1); laply(seq_along(yy), function(i){y=yy[[i]][1]; substr(x[i], y, y + attr(yy[[i]], "match.length")[1]-1)})}
+#rege('b.', cn('abcd xy 23b67b8'))
+# [1] "bc" ""   "b6"
+
+#'   wrappers for regexpr
+grege1= function(patt, x) {yy= gregexpr(patt, x, 1)[[1]];  laply(seq_along(yy), function(i){y=yy[i];  substr(x, y, y + attr(yy, "match.length")[i]-1)})}
+#grege1('b.', 'abcdbnm')
+#grege1('x', 'abcdbnm')
+# [1] "bc" "bn"
+#  1 
+# "" 
+
+# nOK grege= function(patt, x) {yy= gregexpr(patt, x); str(yy); llply(yy, function(z)laply(seq_along(z), function(i){y=z[i];  substr(x, y, y + attr(z, "match.length")[i]-1)}))}
+
+grege= function(patt, x) llply(x, function(z)grege1(patt, z))
+# grege('b.', cn('abcd xy 23b67b8 absbeb3'))
+
+
+
+#= sub ... in file, used by CreateProj =
 fsub= function(fin="M:/83_ScopeR/AegisCustomDataSourceView.script"
 		, fout= gsub('$', '-copy$', fin)
 		, fileShow= F
@@ -364,11 +410,15 @@ fsub= function(fin="M:/83_ScopeR/AegisCustomDataSourceView.script"
 	args <- as.list(substitute(list(...)))[-1L]
 	
 	catt('fin=', fin, ' fout=', fout)
+	if(file.exists(fout)){warning(sf('fout %s exists; Do nothing!', fout)); return()}
+	
 	fi= file(fin, "r")
 	s= readLines(fi, warn = F)
 	#
 	close(fi)
-	catt(11111)
+	#	catt(11111)
+	#	catt(names(args))
+	#	str(args)
 	
 	for(key in names(args)) s= gsub(key, eval(args[[key]], envir= sys.parent()), s)
 	
@@ -379,32 +429,26 @@ fsub= function(fin="M:/83_ScopeR/AegisCustomDataSourceView.script"
 	#brr()
 	
 	if(fout != '') {writeLines(head(s,99999), con = fout)
-		if(fileShow)file.edit(fout)
+		#if(fileShow)file.edit(fout)
+		if(fileShow)browseURL('file://' %+% fout)
 	}
 	invisible(s)
 }
 
-
-CreateNewProj= function(newProj.name= 'newProjTemplName', Templ.dir= 'T:/work/UseR-2013/99_commonR/newProjTemplName', root='T:/work/UseR-2013') {
-	#CreateNewProj= function(newProj.name= '70_PubCredit', Templ.dir= 'R:/work/999/71_TestProjTemplate/zProjTempl', root='R:/work') {
+CreateProj= CreateProject= CreateNewProj= function(newProj.name= 'newProjTemplName', Templ.dir= 'T:/work/UseR-2013/99_commonR/newProjTemplName', root='T:/work/UseR-2013') {
 	sw(sf('%s/%s', root, newProj.name))
 	dir.create('in')
 	dir.create('out')
 	
 	gw()
 	
-	
-	#for(f in dir(Templ.dir, patt='^zz')){
-	
-#	files= dir(Templ.dir, include.dirs='F')	
-#	catt('files=', files)
-	
+
 	for(f in dir(Templ.dir,  patt='newProjTemplName.*')){
 		catt(60, f, sf('%s/%s/%s', root, newProj.name, sub('zz', newProj.name, f)))
 		#file.copy(fp(Templ.dir,f), gw())
 		catt('f=', f)
 		#if(grepl('zz', f)) fsub(fin= f
-		if(grepl('newProjTemplName', f) &!grepl('doc.?$', f)) {
+		if(grepl('newProjTemplName', f) & !grepl('doc.?$', f)) {
 			fsub(fin= fp(Templ.dir,f)
 						, fout= sub('newProjTemplName', newProj.name, f)
 						, fileShow= F
@@ -413,7 +457,7 @@ CreateNewProj= function(newProj.name= 'newProjTemplName', Templ.dir= 'T:/work/Us
 						, newProjTemplName= sf('%s', newProj.name)
 						, `00-00-00`= DT())
 	
-		} else 	file.copy(fp(Templ.dir,f), fp(gw(), sub('newProjTemplName', newProj.name, f)))	
+		} else 	file.copy(fp(Templ.dir,f), fp(gw(), sub('newProjTemplName', newProj.name, f)), overwrite= F)	
 		
 		#file.rename(f, sub('newProjTemplName', newProj.name, f))
 		#file.remove(f)
@@ -430,8 +474,6 @@ if(0) { #= Jun 23, 2013
 	# CreateNewProj(newProj.name= 'newProjTemplName', Templ.dir= 'R:/work/R-svn-ass/00_commonR/71_TestProjTemplate/zProjTempl', root='M:')
 	CreateNewProj(newProj.name= '97_tutorial-demo', Templ.dir= 'T:/work/UseR-2013/99_commonR/newProjTemplName', root='T:/work/UseR-2013')
 	CreateNewProj(newProj.name= '96_aaa', Templ.dir= 'T:/work/UseR-2013/99_commonR/newProjTemplName', root='T:/work/UseR-2013')
-	
-
 }
 
 
@@ -451,6 +493,7 @@ if(0) { #= Jun 23, 2013
 	# 13              atl function
 	# 14               BA function
 	# # he(sus(allFunInMem(), , sel= cn("x cl")), 5)
+	
 	
 	countPatt= function(s= c('{ {b}', 'n s{}', 'n abbab s'), patt='ab'){
 		s= gsub( patt, '@', s)
@@ -487,7 +530,7 @@ if(0) { #= Jun 23, 2013
 	
 	if(0){
 		
-		#TODO: treat "#"  correctly
+		#TODO: treat sequence of  #, ', "  correctly
 		
 		(countDepth2(s= c('{ {b}', 'n s{}}', 'n s'), ch1='{', ch2='}'))
 		# [1]  1 -1  0
@@ -563,7 +606,7 @@ if(0) { #= Jun 23, 2013
 	}
 }
 
-
+#' really it used for backticks rather than single quotes : 
 subSingleQuote2div= function(quote='^\\s*`\\s*$', pattNeg='\'\\`\'|\"\\`\"', repl=c('<div class="sq">', '</div>'), s1= readLines(theFile, warn=F)){
 	x= grepl(patt=quote, s1) & !grepl(patt=pattNeg, s1)
 	if(sum(x) %% 2 != 0) warning(sf('odd quotes in %s: %s', attr(s1,"theFile"), pas(which(x))))
@@ -574,31 +617,28 @@ subSingleQuote2div= function(quote='^\\s*`\\s*$', pattNeg='\'\\`\'|\"\\`\"', rep
 
 
 
-# HHInit ??
-
-#HHp2= function(capt=.main, Width = par("din")[1] , Height =  par("din")[2], GraphPointSize = 24, ...){
-HHp= HHp2= function(capt=.main, Width = dev.size(units = "px")[1] , off= T,  Height =  dev.size(units = "px")[2]
-		, GraphPointSize = 12, dirr='../img', type= "cairo", res=96, dev=0, fNameWithCapt=F, ...){ # type= "windows"
-	op= options(); options(error=dummy)
+# do we need  HHInit ??
+#' wrapper for dev.print  -  save graphics to .png file
+sg= HHp= function(capt=.main, Width = dev.size(units = "px")[1] , off= T,  Height =  dev.size(units = "px")[2]
+		, GraphPointSize = 12, dirr='../img', type= "cairo", res=96, dev=0, fNameWithCapt=F, gg=F, ...){ # type= "windows"
+	op= options(); on.exit(options(op))  #; options(error=dummy)
 	if(!file.exists(dirr)) dir.create(dirr)
-	#.iPic<<- max(nu(gsub('^Pic_(\\d+)[^\\d]*\\.png$','\\1', dir(dirr, patt='.png$'))))
-	.iPic<<- max(nu(gsub('^Pic_(\\d+).*\\.png$','\\1', dir(dirr, patt='.png$'))))
-	if(is.na(.iPic) || .iPic < 0) .iPic<<- 0
+	.iPic<<- max(0, nu(gsub('^Pic_(\\d+).*\\.png$', '\\1', dir(dirr, patt='.png$'))), na.rm=T)
+	# catt('--------------------------------------- HHp: old iPic=', .iPic)
 	GraphFileName=  if(fNameWithCapt) sf('Pic_%s. %s', .iPic<<- .iPic+1, capt) else  sf('Pic_%s', .iPic<<- .iPic+1)
-	#AbsGraphFileName= sf('%s/img/%s.png', gw(), GraphFileName)
+
 	AbsGraphFileName= sf('%s/%s/%s.png', gw(), dirr, GraphFileName)
+	catt('HHp: printing to ', AbsGraphFileName)
+	
 	if(dev>0) dev.set(dev)
-	dev.print(device = png, file = AbsGraphFileName, 
-			width= Width, height = Height, pointsize= GraphPointSize, units="px", type= type,...)
-	if(0) dev.print(device = tiff, file = sub('png$', 'tif', AbsGraphFileName), 
-				width = Width, height = Height, pointsize = GraphPointSize, units="px", compression= "none",...)
+	if(gg){try({  	ggsave(AbsGraphFileName)}, s=F)
+	} else { dev.print(device = png, file = AbsGraphFileName, 
+				width= Width, height = Height, pointsize= GraphPointSize, units="px", type= type,...)
+	}
 	
 	if(exists('.HTML.file'))	cat(sf('<p align="left"><img src="img/%s.png"  border="0" width="%s" height="%s"/><br/>
 								<span class="caption>%s</span><br/></p>/n', GraphFileName, Width, Height, capt)
 				, file = .HTML.file, append = TRUE)
-	if(0)if(exists('.HTML.file'))	cat(sf('<p align="left"><img src="img/%s.tif"  border="0" width="%s" height="%s"/><br/>
-									<span class="caption>%s</span><br/></p>/n', GraphFileName, Width, Height, capt)
-					, file = .HTML.file, append = TRUE)
 	# dir(fp(.HTML.file,'../../img'))
 	
 	if(off) dev.off()
@@ -609,13 +649,12 @@ HHp= HHp2= function(capt=.main, Width = dev.size(units = "px")[1] , off= T,  Hei
 	invisible(sf('%s. %s', GraphFileName, capt))
 }
 
-
-HHjp= function(p= p1, capt='', dirr='../img', absPath=T) {
-	.ijPic<<- max(nu(gsub('^jPic_(\\d+).*\\.htm$','\\1', dir(dirr, patt='.htm$'))))
-	if(is.na(.ijPic) || .ijPic < 0) .ijPic<<- 0
+#'  save rCharts graphics to jPic_dd.htm file
+sgj= HHjp= function(p= p1, capt='', dirr='../img', absPath=T) {
+	.ijPic<<- max(0, nu(gsub('^jPic_(\\d+).*\\.htm$','\\1', dir(dirr, patt='.htm$'))), na.rm=T)
 	GraphFileName=  sf('jPic_%s', .ijPic<<- .ijPic+1)
 	AbsGraphFileName= if(absPath) sf('%s/%s.htm', dirr, GraphFileName)  else sf('%s/%s/%s.htm', gw(), dirr, GraphFileName)
-	p$save(AbsGraphFileName)  #  or  writeLines(p$render(), AbsGraphFileName)
+	p$save(AbsGraphFileName) 
 	catf('Saved to: expl("%s"). %s\n', AbsGraphFileName, capt)
 	catf('%s. %s\n', GraphFileName, capt)
 	invisible(sf('%s. %s', GraphFileName, capt))
@@ -624,6 +663,7 @@ HHjp= function(p= p1, capt='', dirr='../img', absPath=T) {
 # Saved to: expl("m:/80_ChurnSim/out/../img/jPic_10.htm"). 
 # jPic_10. 
 
+#'===  buid all examples from  rCharts   ===
 # 	HH= function(p1=a) HHjp(p= p1, capt='', dirr='C:\\z\\eclipse\\R-2.14.2\\library\\rCharts\\az\\img')
 
 
@@ -697,7 +737,7 @@ if(0){ #==  rCharts  ==
 	
 	
 	
-	HH= function(p1=a) HHjp(p= p1, capt='', dirr='C:\\z\\eclipse\\R-2.14.2\\library\\rCharts\\az\\img')
+	#HH= function(p1=a) HHjp(p= p1, capt='', dirr='C:\\z\\eclipse\\R-2.14.2\\library\\rCharts\\az\\img')
 	
 	fs= dir('C:\\z\\eclipse\\R-2.14.2\\library\\rCharts\\az\\img')
 	#s= llply(fp('C:\\z\\eclipse\\R-2.14.2\\library\\rCharts\\az\\img', fs), function(f)s=c('<H2>', f, '</H2></br>', readLines(f), '</br>') )
@@ -758,15 +798,17 @@ replaceTagsOutSq= function(s= readLines('M:/85_Otto/85_Otto.r', warn=F)){
 	
 	#s3= unlist(strsplit('~#~' %+% s,''))  # now # is \n
 	s3= strsplit(pas(s,'~#~','~#~'),'')[[1]]  # now # is \n
-	insq= cumprod((-1)^ (s3=='`'))== -1
-	s3[!insq]= sub('>', '&gt;', sub('<', '&lt;', s3[!insq]))
+	inbt= cumprod((-1)^ (s3=='`'))== -1
+	insq= cumprod((-1)^ (s3=="'"))== -1
+	s3[!insq & !inbt]= sub('>', '&gt;', sub('<', '&lt;', s3[!insq & !inbt]))
 	s4= strsplit(pas(s3, '', ''), '~#~') [[1]] #[-1]
 	#s4= s4 %+% comme
 	s4
 }
 
 # 
-s= replaceTagsOutSq(readLines('M:/85_Otto/85_Otto.r', warn=F)); prr(tail(s))
+# s= replaceTagsOutSq(readLines('M:/85_Otto/85_Otto.r', warn=F)); prr(tail(s))
+s= replaceTagsOutSq(c(" <aa '<bb'   `<ee`  <cc", " <aa '<bb'   `<ee`  <cc")); prr(s)
 
 if(0){   #== Misc
 	theFile= 'R:/work/R-svn-ass/00_commonR/zCodeTools.fun.r'
@@ -777,8 +819,8 @@ if(0){   #== Misc
 	gff('sa\\(|===', theFile)
 	
 	theFile= fp(proot, '80_ChurnSim.r')
-	ccc= function()code2HTML(theFile)
-	cc= function()code2HTMLjQuery(theFile) #  cc()
+	#ccc= function()code2HTML(theFile)
+	#cc= function()code2HTMLjQuery(theFile) #  cc()
 	cc()
 	
 	shell('start explorer file:\\\\m:\\80_ChurnSim\\80_ChurnSim.r.jQ.htm')
